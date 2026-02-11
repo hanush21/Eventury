@@ -118,6 +118,23 @@ export default function HomePage() {
 
       setOrderedEventIds(payload.orderedEvents);
       setItineraryExplanation(payload.explanation ?? "");
+
+      const orderedIdsSet = new Set(payload.orderedEvents);
+      const incompatibleEvents = selected.filter((event) => !orderedIdsSet.has(event.id));
+
+      if (incompatibleEvents.length > 0) {
+        const previewNames = incompatibleEvents
+          .slice(0, 3)
+          .map((event) => event.name)
+          .join(", ");
+        const remainingCount = incompatibleEvents.length - 3;
+        const incompatibleLabel =
+          remainingCount > 0 ? `${previewNames} y ${remainingCount} mas` : previewNames;
+
+        toast.warning("Hay eventos incompatibles en la seleccion", {
+          description: `No se pudieron encajar por horario/distancia: ${incompatibleLabel}. Te recomiendo elegir otros eventos compatibles.`,
+        });
+      }
     } catch (requestError) {
       const message =
         requestError instanceof Error
