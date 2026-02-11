@@ -1,35 +1,74 @@
-# Ops And Code — Next.js Frontend Starter
+# Eventury Barcelona
 
-Starter minimalista para proyectos **frontend en Next.js (App Router)** pensado para crecer sin volverse un caos.
+Aplicacion web construida con Next.js + TypeScript para generar itinerarios de eventos en Barcelona usando IA.
 
-La idea es simple: mantener el repositorio pequeño, entendible y fácil de mantener, separando el “wiring” de la app (rutas/layouts) de los módulos de producto. En el canal **Ops And Code** lo uso como base para construir ejemplos y plantillas reutilizables.
+## Stack
 
----
+- Next.js 14 (App Router)
+- TypeScript
+- TailwindCSS
+- shadcn/ui
+- Leaflet + React-Leaflet
 
-## Qué incluye (por ahora)
+## Requisitos previos
 
-- ✅ Next.js con **App Router**
-- ✅ Tailwind CSS
-- ✅ UI base con **shadcn/ui** (componentes reutilizables)
-- ✅ Un “shell layout” de ejemplo y una ruta `/dashboard` para demostrar la estructura
+- Node.js 18.18+ o 20+
+- npm o pnpm
 
-> En el video vamos a añadir: carpeta `docs/`, Docker y CI/CD (GitHub Actions).
+## Instalacion de dependencias
 
----
+```bash
+npm install
+```
 
-## Estructura del proyecto
+o
 
-> Nota: el objetivo de esta estructura es que cuando el proyecto crezca, no tengas que “adivinar” dónde está cada cosa.
+```bash
+pnpm install
+```
 
-```txt
-app/
-  (shell)/
-    layout.tsx
-    dashboard/
-      page.tsx
-  layout.tsx
-  page.tsx
-  globals.css
-public/
-shared/            # (se irá usando para UI/utilidades comunes si lo prefieres)
-components/ui/     # shadcn/ui (según tu configuración)
+## Configurar variables de IA
+
+Crea un archivo `.env.local` en la raiz:
+
+```bash
+AI_PROVIDER=deepseek
+AI_MODEL=deepseek-chat
+AI_API_KEY=tu_api_key_aqui
+```
+
+Valores soportados:
+
+- `AI_PROVIDER=deepseek` usa `https://api.deepseek.com/chat/completions`.
+- `AI_PROVIDER=gemini` usa `https://generativelanguage.googleapis.com`.
+- `AI_MODEL` permite forzar un modelo especifico.
+  - DeepSeek recomendado: `deepseek-chat`.
+  - Gemini opcional: `gemini-2.0-flash` (o dejar vacio para fallback interno).
+
+La API key nunca se hardcodea en el codigo; se lee en `app/api/itinerary/route.ts`.
+
+## Ejecutar en desarrollo
+
+```bash
+npm run dev
+```
+
+o
+
+```bash
+pnpm dev
+```
+
+Abre `http://localhost:3000`.
+
+## Estructura relevante
+
+- `app/page.tsx`: UI principal con filtros, seleccion de eventos, mapa e itinerario.
+- `app/api/itinerary/route.ts`: endpoint POST para generar itinerario con IA.
+- `components/map/ItineraryMap.tsx`: mapa OSM con marcadores y polyline.
+- `data/events-bcn.ts`: eventos mock tipados.
+- `types/event.ts`: tipo `Event`.
+- `lib/time.ts`: helpers de tiempo y orden por hora.
+- `lib/events.ts`: filtros por categoria y mapeos IDs <-> objetos.
+- `lib/itinerary-ai.ts`: construccion de prompt y parseo/validacion de respuesta IA.
+- `lib/routing.ts`: estimacion local de distancias/tiempos y enlace de ruta en Google Maps.

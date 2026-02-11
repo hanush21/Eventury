@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+
+import { Toaster } from "@/shared/ui/shadcn/sonner";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ops And Code — Frontend Starter",
-  description: "Next.js starter structure for modular frontends",
+  title: "Eventury Barcelona",
+  description: "Aplicacion para generar itinerarios de eventos en Barcelona con IA.",
 };
 
 export default function RootLayout({
@@ -13,6 +16,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
+        <Toaster />
       </body>
     </html>
   );
